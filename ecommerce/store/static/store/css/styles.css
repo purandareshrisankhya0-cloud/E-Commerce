@@ -1,0 +1,8 @@
+/* custom styles */
+body {
+    padding-top: 56px;
+}
+.card img {
+    object-fit: cover;
+    height: 200px;
+}
