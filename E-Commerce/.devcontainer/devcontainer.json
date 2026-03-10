@@ -1,0 +1,24 @@
+{
+  "name": "E-Commerce Django",
+  "image": "mcr.microsoft.com/devcontainers/python:3.11",
+  "features": {
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "mutantdino.resourcemonitor"
+      ]
+    }
+  },
+  "postCreateCommand": "pip install django firebase-admin && echo 'Django installed successfully'",
+  "forwardPorts": [8000],
+  "portsAttributes": {
+    "8000": {
+      "label": "Django Development Server",
+      "onAutoForward": "notify"
+    }
+  }
+}
