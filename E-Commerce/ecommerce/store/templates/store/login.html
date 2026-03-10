@@ -3,19 +3,41 @@
 
 {% block content %}
 <div class="container mt-4">
-    <h2>Login</h2>
-    <p>Click the button below to sign in with Google via Firebase.</p>
-    <button class="btn btn-primary" onclick="firebaseLogin()">Sign in with Google</button>
-    <hr>
-    <p>If you already have an ID token you can still paste it below:</p>
-    <form method="post">
-        {% csrf_token %}
-        <div class="mb-3">
-            <label for="idToken" class="form-label">ID Token</label>
-            <input type="text" name="idToken" id="idToken" class="form-control">
+    <div class="auth-container">
+        <h2><i class="fas fa-sign-in-alt me-2"></i>Welcome Back</h2>
+        <p class="subtitle">Sign in to your account to continue shopping</p>
+        
+        <div class="d-grid gap-3">
+            <button class="btn btn-primary btn-lg" onclick="firebaseLogin()">
+                <i class="fab fa-google me-2"></i>Sign in with Google
+            </button>
         </div>
-        <button type="submit" class="btn btn-secondary">Authenticate</button>
-    </form>
-    <p>The Firebase config in <code>base.html</code> must be set to your project values.</p>
+        
+        <div class="auth-divider">
+            <span>OR</span>
+        </div>
+        
+        <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="idToken" class="form-label">
+                    <i class="fas fa-key me-1"></i>ID Token
+                </label>
+                <input type="text" name="idToken" id="idToken" class="form-control" 
+                       placeholder="Paste your Firebase ID token here">
+                <div class="form-text">If you already have an ID token, you can paste it above to authenticate.</div>
+            </div>
+            <button type="submit" class="btn btn-secondary w-100">
+                <i class="fas fa-check me-1"></i>Authenticate
+            </button>
+        </form>
+        
+        <div class="mt-4 p-3 bg-light rounded">
+            <small class="text-muted">
+                <i class="fas fa-info-circle me-1"></i>
+                The Firebase config in <code>base.html</code> must be set to your project values.
+            </small>
+        </div>
+    </div>
 </div>
 {% endblock %}
