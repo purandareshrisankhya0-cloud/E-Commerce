@@ -1,0 +1,62 @@
+[
+  {
+    "model": "store.product",
+    "pk": 1,
+    "fields": {
+      "name": "Red T-shirt",
+      "price": "19.99",
+      "description": "Comfortable cotton shirt in red.",
+      "stock": 42,
+      "category": "Apparel",
+      "image_url": "https://via.placeholder.com/300x200.png?text=Red+T-shirt"
+    }
+  },
+  {
+    "model": "store.product",
+    "pk": 2,
+    "fields": {
+      "name": "Blue Jeans",
+      "price": "49.95",
+      "description": "Stylish denim jeans with a modern cut.",
+      "stock": 27,
+      "category": "Apparel",
+      "image_url": "https://via.placeholder.com/300x200.png?text=Blue+Jeans"
+    }
+  },
+  {
+    "model": "store.product",
+    "pk": 3,
+    "fields": {
+      "name": "Wireless Headphones",
+      "price": "89.50",
+      "description": "Noise‑cancelling over‑ear headphones with long battery life.",
+      "stock": 15,
+      "category": "Electronics",
+      "image_url": "https://via.placeholder.com/300x200.png?text=Headphones"
+    }
+  },
+  {
+    "model": "store.product",
+    "pk": 4,
+    "fields": {
+      "name": "Coffee Mug",
+      "price": "7.25",
+      "description": "Ceramic mug, 350ml capacity, dishwasher safe.",
+      "stock": 118,
+      "category": "Kitchen",
+      "image_url": "https://via.placeholder.com/300x200.png?text=Coffee+Mug"
+    }
+  },
+  {
+    "model": "store.product",
+    "pk": 5,
+    "fields": {
+      "name": "Notebook",
+      "price": "3.99",
+      "description": "100‑page ruled notebook for everyday use.",
+      "stock": 250,
+      "category": "Stationery",
+      "image_url": "https://via.placeholder.com/300x200.png?text=Notebook"
+    }
+  }
+]

@@ -1,0 +1,73 @@
+{% extends 'store/base.html' %}
+{% load static %}
+
+{% block title %}Home - Mini Online Store{% endblock %}
+
+{% block content %}
+<!-- Hero Section with Image -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-6 text-center text-md-start">
+                <h1 class="animate-fade-in">Welcome to Mini Online Store 🛒</h1>
+                <p class="lead animate-fade-in">Discover amazing products at great prices!</p>
+                <a href="#products" class="btn btn-light btn-lg animate-fade-in">
+                    <i class="fas fa-arrow-down me-2"></i>Shop Now
+                </a>
+            </div>
+            <div class="col-md-6 text-center mt-4 mt-md-0">
+                <img src="https://images.unsplash.com/photo-1472851294608-062f824d29cc?w=500&h=400&fit=crop" 
+                     alt="Shopping" 
+                     class="img-fluid rounded-4 shadow-lg"
+                     style="max-width: 100%; height: auto;">
+            </div>
+    </div>
+</section>
+
+<!-- Products Section -->
+<div class="container mt-4" id="products">
+    <div class="row mb-4">
+        <div class="col-12 text-center">
+            <h2 class="fw-bold text-gradient">Our Products</h2>
+            <p class="text-muted">Browse our latest collection</p>
+        </div>
+    <div class="row">
+        {% for product in products %}
+        <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
+            <div class="card h-100 shadow-sm">
+                {% if product.image_url %}
+                <img src="{{ product.image_url }}" class="card-img-top" alt="{{ product.name }}">
+                {% else %}
+                <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 220px;">
+                    <i class="fas fa-image text-muted fa-3x"></i>
+                </div>
+                {% endif %}
+                <div class="card-body d-flex flex-column">
+                    {% if product.category %}
+                    <span class="badge-category mb-2">{{ product.category }}</span>
+                    {% endif %}
+                    <h5 class="card-title">{{ product.name }}</h5>
+                    <p class="card-text text-truncate">{{ product.description }}</p>
+                    <p class="card-text fw-bold">${{ product.price }}</p>
+                    <div class="mt-auto d-flex gap-2">
+                        <a href="{% url 'product_detail' product.id %}" class="btn btn-outline-primary flex-grow-1">
+                            <i class="fas fa-eye me-1"></i>View
+                        </a>
+                        <form method="post" action="{% url 'add_to_cart' product.id %}" class="d-inline">
+                            {% csrf_token %}
+                            <input type="hidden" name="quantity" value="1">
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-cart-plus"></i>
+                            </button>
+                        </form>
+                    </div>
+            </div>
+        {% empty %}
+        <div class="col-12 text-center py-5">
+            <i class="fas fa-box-open text-muted fa-4x mb-3"></i>
+            <h3 class="text-muted">No products found</h3>
+            <p class="text-muted">Please check back later for new products!</p>
+        </div>
+        {% endfor %}
+    </div>
+{% endblock %}

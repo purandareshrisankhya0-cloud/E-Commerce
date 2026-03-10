@@ -1,0 +1,21 @@
+{% extends 'store/base.html' %}
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Login</h2>
+    <p>Click the button below to sign in with Google via Firebase.</p>
+    <button class="btn btn-primary" onclick="firebaseLogin()">Sign in with Google</button>
+    <hr>
+    <p>If you already have an ID token you can still paste it below:</p>
+    <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="idToken" class="form-label">ID Token</label>
+            <input type="text" name="idToken" id="idToken" class="form-control">
+        </div>
+        <button type="submit" class="btn btn-secondary">Authenticate</button>
+    </form>
+    <p>The Firebase config in <code>base.html</code> must be set to your project values.</p>
+</div>
+{% endblock %}
