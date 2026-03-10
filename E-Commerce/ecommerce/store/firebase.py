@@ -1,18 +1,30 @@
 import firebase_admin
 from firebase_admin import credentials, firestore
 import os
+from pathlib import Path
 
-# Get the directory where this file is located
-base_dir = os.path.dirname(os.path.abspath(__file__))
-firebase_key_path = os.path.join(base_dir, 'e-commerce-aa53b-firebase-adminsdk-fbsvc-8ab0cf2976.json')
+# Get the project root directory (parent of the store app)
+# This works both locally and in Codespace
+project_root = Path(__file__).resolve().parent.parent.parent
 
-# Also check environment variable
-firebase_key_path = os.environ.get('FIREBASE_KEY_PATH', firebase_key_path)
+# Check multiple possible locations for the Firebase key file
+possible_paths = [
+    os.path.join(os.path.dirname(__file__), 'e-commerce-aa53b-firebase-adminsdk-fbsvc-8ab0cf2976.json'),
+    project_root / 'store' / 'e-commerce-aa53b-firebase-adminsdk-fbsvc-8ab0cf2976.json',
+    os.environ.get('FIREBASE_KEY_PATH', ''),
+]
 
-cred = credentials.Certificate(firebase_key_path)
+# Find the first valid path
+firebase_key_path = None
+for path in possible_paths:
+    if path and os.path.exists(path):
+        firebase_key_path = path
+        break
 
-# Initialize app (only do this once)
-firebase_admin.initialize_app(cred)
-
-# Create Firestore client
-db = firestore.client()
+if firebase_key_path:
+    cred = credentials.Certificate(firebase_key_path)
+    firebase_admin.initialize_app(cred)
+    db = firestore.client()
+else:
+    # Log warning but don't crash - Firebase may not be configured
+    print("WARNING: Firebase credentials not found. Set FIREBASE_KEY_PATH environment variable or ensure JSON file exists.")

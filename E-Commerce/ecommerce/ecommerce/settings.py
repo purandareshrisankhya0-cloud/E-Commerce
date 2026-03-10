@@ -10,11 +10,22 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Firebase Configuration - supports both local and Codespace/Production
+# Set these as environment variables or use .env file
+FIREBASE_CONFIG = {
+    'apiKey': os.environ.get('FIREBASE_API_KEY', ''),
+    'authDomain': os.environ.get('FIREBASE_AUTH_DOMAIN', ''),
+    'projectId': os.environ.get('FIREBASE_PROJECT_ID', ''),
+    'storageBucket': os.environ.get('FIREBASE_STORAGE_BUCKET', ''),
+    'messagingSenderId': os.environ.get('FIREBASE_MESSAGING_SENDER_ID', ''),
+    'appId': os.environ.get('FIREBASE_APP_ID', ''),
+}
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
@@ -25,7 +36,7 @@ SECRET_KEY = 'django-insecure--esd@%j-co1nl@=u6%7qx097)8rc!=#^t&44&lz3a31t-3d6!w
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -62,6 +73,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'store.context_processors.firebase_config',
             ],
         },
     },

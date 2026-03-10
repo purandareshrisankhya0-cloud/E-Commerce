@@ -64,12 +64,14 @@
 
 <!-- Firebase Web SDK (module) -->
 <script type="module">
-    // Replace with your own Firebase config from the console
+    // Firebase config from Django settings via context processor
     const firebaseConfig = {
-        apiKey: "YOUR_API_KEY",
-        authDomain: "your-project.firebaseapp.com",
-        projectId: "your-project-id",
-        // ...other values as needed
+        apiKey: "{{ firebase_config.apiKey|default:'YOUR_API_KEY' }}",
+        authDomain: "{{ firebase_config.authDomain|default:'your-project.firebaseapp.com' }}",
+        projectId: "{{ firebase_config.projectId|default:'your-project-id' }}",
+        storageBucket: "{{ firebase_config.storageBucket|default:'' }}",
+        messagingSenderId: "{{ firebase_config.messagingSenderId|default:'' }}",
+        appId: "{{ firebase_config.appId|default:'' }}"
     };
 
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
