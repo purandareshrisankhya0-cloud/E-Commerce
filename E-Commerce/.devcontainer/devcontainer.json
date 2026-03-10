@@ -13,7 +13,7 @@
       ]
     }
   },
-  "postCreateCommand": "pip install django firebase-admin && echo 'Django installed successfully'",
+  "postCreateCommand": "pip install django firebase-admin",
   "forwardPorts": [8000],
   "portsAttributes": {
     "8000": {
@@ -22,3 +22,4 @@
     }
   }
 }
+
