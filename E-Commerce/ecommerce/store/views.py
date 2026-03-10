@@ -3,7 +3,7 @@ from django.urls import reverse
 from django.views.decorators.http import require_POST
 from django.contrib import messages
 
-from .firebase import db
+from . import firebase
 from firebase_admin import auth
 
 
@@ -19,8 +19,13 @@ def _save_cart(request, cart):
 
 
 def home(request):
+    # Check if Firebase is initialized
+    if firebase.db is None:
+        messages.error(request, 'Database not connected. Please check Firebase configuration.')
+        return render(request, 'store/home.html', {'products': []})
+    
     # Fetch all products from Firestore
-    products_ref = db.collection('Products').stream()
+    products_ref = firebase.db.collection('Products').stream()
     products = []
     for doc in products_ref:
         data = doc.to_dict()
@@ -31,7 +36,11 @@ def home(request):
 
 
 def product_detail(request, product_id):
-    doc = db.collection('Products').document(product_id).get()
+    if firebase.db is None:
+        messages.error(request, 'Database not connected.')
+        return redirect('home')
+    
+    doc = firebase.db.collection('Products').document(product_id).get()
     if not doc.exists:
         messages.error(request, 'Product not found.')
         return redirect('home')
@@ -42,8 +51,12 @@ def product_detail(request, product_id):
 
 @require_POST
 def add_to_cart(request, product_id):
+    if firebase.db is None:
+        messages.error(request, 'Database not connected.')
+        return redirect('home')
+    
     quantity = int(request.POST.get('quantity', 1))
-    doc = db.collection('Products').document(product_id).get()
+    doc = firebase.db.collection('Products').document(product_id).get()
     if not doc.exists:
         messages.error(request, 'Product does not exist.')
         return redirect('home')
@@ -96,9 +109,20 @@ def checkout(request):
         messages.error(request, 'Your cart is empty.')
         return redirect('cart')
 
+    if firebase.db is None:
+        messages.error(request, 'Database not connected. Cannot process order.')
+        return redirect('cart')
+
     # get customer info from form or session
     name = request.POST.get('name', '')
     email = request.POST.get('email', '')
+    # billing address
+    address = request.POST.get('address', '')
+    city = request.POST.get('city', '')
+    state = request.POST.get('state', '')
+    zipcode = request.POST.get('zipcode', '')
+    country = request.POST.get('country', '')
+    
     from firebase_admin import firestore as _firestore
 
     order_data = {
@@ -106,10 +130,17 @@ def checkout(request):
         'total': sum(item['price'] * item['quantity'] for item in cart.values()),
         'name': name,
         'email': email,
+        'address': {
+            'street': address,
+            'city': city,
+            'state': state,
+            'zipcode': zipcode,
+            'country': country,
+        },
         'status': 'pending',
         'created_at': _firestore.SERVER_TIMESTAMP,
     }
-    db.collection('Orders').add(order_data)
+    firebase.db.collection('Orders').add(order_data)
     # clear cart
     request.session['cart'] = {}
     messages.success(request, 'Order placed successfully!')
@@ -126,7 +157,7 @@ def login_view(request):
             messages.success(request, 'Logged in successfully.')
             return redirect('home')
         except Exception as e:
-            messages.error(request, 'Authentication failed.')
+            messages.error(request, 'Authentication failed. Firebase may not be configured.')
     return render(request, 'store/login.html')
 
 
